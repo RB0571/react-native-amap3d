@@ -16,5 +16,7 @@ Pod::Spec.new do |s|
   s.source_files = 'ios/**/*.{h,m}'
 
   s.dependency 'React'
-  s.dependency 'AMapNavi'
+  s.dependency 'AMapNavi-NO-IDFA'
+  s.dependency 'AMapSearch-NO-IDFA'
+  s.dependency 'AMapLocation-NO-IDFA'
 end

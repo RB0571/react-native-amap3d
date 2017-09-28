@@ -7,6 +7,7 @@ import HeatMap from './components/maps/HeatMap'
 import MultiPoint from './components/maps/MultiPoint'
 import Navigation from './components/navigation'
 import MapUtils from './components/Utils'
+import MapSearch from './components/MapSearch'
 
 MapView.Marker = Marker
 MapView.Polyline = Polyline
@@ -26,4 +27,5 @@ export {
   MultiPoint,
   Navigation,
   MapUtils,
+  MapSearch
 }
