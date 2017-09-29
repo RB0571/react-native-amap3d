@@ -6,6 +6,7 @@ import com.amap.api.services.geocoder.GeocodeSearch;
 import com.amap.api.services.geocoder.RegeocodeAddress;
 import com.amap.api.services.geocoder.RegeocodeQuery;
 import com.amap.api.services.geocoder.RegeocodeResult;
+import com.amap.api.services.geocoder.StreetNumber;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -106,6 +107,11 @@ public class AMapSearchReactModule extends ReactContextBaseJavaModule
             map.putString("township",mRegeocodeAddress.getTownship());
             map.putString("neighborhood",mRegeocodeAddress.getNeighborhood());
             map.putString("building",mRegeocodeAddress.getBuilding());
+            StreetNumber streetNumber = mRegeocodeAddress.getStreetNumber();
+            map.putString("street",streetNumber.getStreet());
+            map.putString("number",streetNumber.getNumber());
+            map.putString("direction",streetNumber.getDirection());
+            map.putDouble("distance",streetNumber.getDistance());
         } else {
             //failed
             map.putInt("errorCode", -1);

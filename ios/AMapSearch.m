@@ -119,6 +119,13 @@ RCT_EXPORT_METHOD(reGeocodeSearch:(NSDictionary *)options eventDesc:(NSString *)
             resultDic[@"towncode"]    = addressComponent.towncode ? : [NSNull null];
             resultDic[@"neighborhood"]   = addressComponent.neighborhood ? : [NSNull null];
             resultDic[@"building"]   = addressComponent.building ? : [NSNull null];
+            AMapStreetNumber *streetNumber = addressComponent.streetNumber;
+            if (streetNumber) {
+                resultDic[@"street"] = streetNumber.street;
+                resultDic[@"number"] = streetNumber.number;
+                resultDic[@"direction"] = streetNumber.direction;
+                resultDic[@"distance"] = @(streetNumber.distance);
+            }
         }
     }
     [self.bridge.eventDispatcher sendAppEventWithName:self.eventDesc body:resultDic];
