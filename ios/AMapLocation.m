@@ -76,4 +76,33 @@ RCT_EXPORT_METHOD(stopUpdatingLocatoin) {
     [self.bridge.eventDispatcher sendAppEventWithName:self.eventDesc body:resultDic];
 }
 
+#pragma mark - Location once
+RCT_EXPORT_METHOD(getCurrentLocation:(NSString *)eventDesc) {
+    AMapLocationManager *locationManager = [[AMapLocationManager alloc] init];
+    // 带逆地理信息的一次定位（返回坐标和地址信息）
+    [locationManager setDesiredAccuracy:kCLLocationAccuracyHundredMeters];
+    //   定位超时时间，最低2s，此处设置为2s
+    locationManager.locationTimeout = 2;
+    [locationManager requestLocationWithReGeocode:NO completionBlock:^(CLLocation *location, AMapLocationReGeocode *regeocode, NSError *error) {
+        NSMutableDictionary *resultDic = [NSMutableDictionary dictionary];
+        if (error)
+        {
+            NSLog(@"locError:{%ld - %@};", (long)error.code, error.localizedDescription);
+//            if (error.code == AMapLocationErrorLocateFailed)
+            {
+                //failed
+                resultDic[@"errorCode"] = @(-1);
+                resultDic[@"errorInfo"] = @"获取位置失败";
+            }
+        } else {
+            NSLog(@"location:%@", location);
+            resultDic[@"latitude"] = @(location.coordinate.latitude);
+            resultDic[@"longitude"] = @(location.coordinate.longitude);
+            resultDic[@"horizontalAccuracy"] = @(location.horizontalAccuracy);
+            resultDic[@"verticalAccuracy"] = @(location.verticalAccuracy);
+        }
+        [self.bridge.eventDispatcher sendAppEventWithName:eventDesc body:resultDic];
+    }];
+}
+
 @end

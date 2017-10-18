@@ -13,7 +13,8 @@ class AMap3DPackage : ReactPackage {
     override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {
         return listOf(
                 AMapUtilsModule(reactContext),
-                AMapSearchReactModule(reactContext)
+                AMapSearchReactModule(reactContext),
+                AMapLocationReactModule(reactContext)
         )
     }
 

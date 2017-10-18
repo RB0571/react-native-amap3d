@@ -25,5 +25,18 @@ module.exports = {
     stopUpdatingLocatoin: () => {
         listener && DeviceEventEmitter.removeListener(listener)
         AMapLocation.stopUpdatingLocatoin()
+    },
+    getCurrentLocation: (callback) => {
+        const event = onLocationUpdatingEvent + Math.random().toString(36).substr(2)
+        let listener1;
+        const handler = (body) => {
+            callback && callback(body)
+            listener1 && DeviceEventEmitter.removeListener(listener1)
+        }
+        listener1 = DeviceEventEmitter.addListener(
+            event,
+            handler
+        );
+        AMapLocation.getCurrentLocation(event)
     }
 };
