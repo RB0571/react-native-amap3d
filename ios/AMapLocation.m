@@ -8,7 +8,6 @@
 #import <AMapFoundationKit/AMapFoundationKit.h>
 #import <AMapLocationKit/AMapLocationKit.h>
 
-
 #pragma ide diagnostic ignored "OCUnusedClassInspection"
 
 
@@ -18,6 +17,7 @@ static NSString * const kErrorInfoKey = @"errorInfo";
 @interface AMapLocation () <AMapLocationManagerDelegate>
 
 @property (nonatomic, strong) AMapLocationManager         *locationManager;
+@property (nonatomic, strong) AMapLocationManager   *locationManager1;
 
 @property (nonatomic, strong) NSString *eventDesc;
 
@@ -78,12 +78,14 @@ RCT_EXPORT_METHOD(stopUpdatingLocatoin) {
 
 #pragma mark - Location once
 RCT_EXPORT_METHOD(getCurrentLocation:(NSString *)eventDesc) {
-    AMapLocationManager *locationManager = [[AMapLocationManager alloc] init];
+    self.locationManager1 = [[AMapLocationManager alloc] init];
     // 带逆地理信息的一次定位（返回坐标和地址信息）
-    [locationManager setDesiredAccuracy:kCLLocationAccuracyHundredMeters];
+    [self.locationManager1 setDesiredAccuracy:kCLLocationAccuracyHundredMeters];
     //   定位超时时间，最低2s，此处设置为2s
-    locationManager.locationTimeout = 2;
-    [locationManager requestLocationWithReGeocode:NO completionBlock:^(CLLocation *location, AMapLocationReGeocode *regeocode, NSError *error) {
+    self.locationManager1.locationTimeout = 2;
+    //   逆地理请求超时时间，最低2s，此处设置为2s
+    self.locationManager1.reGeocodeTimeout = 2;
+    [self.locationManager1 requestLocationWithReGeocode:YES completionBlock:^(CLLocation *location, AMapLocationReGeocode *regeocode, NSError *error) {
         NSMutableDictionary *resultDic = [NSMutableDictionary dictionary];
         if (error)
         {
@@ -100,6 +102,17 @@ RCT_EXPORT_METHOD(getCurrentLocation:(NSString *)eventDesc) {
             resultDic[@"longitude"] = @(location.coordinate.longitude);
             resultDic[@"horizontalAccuracy"] = @(location.horizontalAccuracy);
             resultDic[@"verticalAccuracy"] = @(location.verticalAccuracy);
+        }
+        if (regeocode) {
+            //解析regeocode获取地址描述
+            resultDic[@"address"]   = regeocode.formattedAddress ? : [NSNull null];
+            resultDic[@"province"]  = regeocode.province ? : [NSNull null];
+            resultDic[@"city"]      = regeocode.city ? : [NSNull null];
+            resultDic[@"district"]  = regeocode.district ? : [NSNull null];
+            resultDic[@"cityCode"]  = regeocode.citycode ? : [NSNull null];
+            resultDic[@"adCode"]    = regeocode.adcode ? : [NSNull null];
+            resultDic[@"street"]    = regeocode.street ? : [NSNull null];
+            resultDic[@"number"]    = regeocode.number ? : [NSNull null];
         }
         [self.bridge.eventDispatcher sendAppEventWithName:eventDesc body:resultDic];
     }];

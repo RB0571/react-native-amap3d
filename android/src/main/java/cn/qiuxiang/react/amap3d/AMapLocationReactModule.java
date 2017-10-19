@@ -181,6 +181,14 @@ public class AMapLocationReactModule extends ReactContextBaseJavaModule
                 map.putDouble("latitude",aMapLocation.getLatitude());
                 map.putDouble("accuracy",aMapLocation.getAccuracy());
                 map.putInt("locationType",aMapLocation.getLocationType());
+                map.putString("address",aMapLocation.getAddress());
+                map.putString("province",aMapLocation.getProvince());
+                map.putString("city",aMapLocation.getCity());
+                map.putString("district",aMapLocation.getDistrict());
+                map.putString("cityCode",aMapLocation.getCityCode());
+                map.putString("adCode",aMapLocation.getAdCode());
+                map.putString("street",aMapLocation.getStreet());
+                map.putString("number",aMapLocation.getStreetNum());
                 Log.d(this.getName(),"latitude:"+aMapLocation.getLatitude()+"longitude:"+aMapLocation.getLongitude());
             }else {
                 //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
